@@ -31,7 +31,7 @@ function UploadPage() {
     style: [],
   })
 
-  const [characterLock, setCharacterLock] = useState<CharacterLock | null>({
+  const [characterLock] = useState<CharacterLock | null>({
     age_range: '',
     ethnicity: '',
     hair_color: '',
@@ -46,7 +46,7 @@ function UploadPage() {
     distinguishing_features: [],
   })
 
-  const [scene, setScene] = useState<Scene>({
+  const [scene] = useState<Scene>({
     location_type: '',
     setting_details: '',
     time_of_day: 'day',
@@ -54,7 +54,7 @@ function UploadPage() {
     atmospheric_qualities: [],
   })
 
-  const [subject, setSubject] = useState<Subject>({
+  const [subject] = useState<Subject>({
     pose_description: '',
     outfit_details: '',
     product_placement: '',
@@ -207,7 +207,7 @@ function UploadPage() {
                 <div className="relative">
                   <img
                     src={preview}
-                    alt="Preview"
+                    alt="Preview of uploaded image"
                     className="max-h-96 mx-auto rounded-lg"
                   />
                   <button
@@ -216,6 +216,7 @@ function UploadPage() {
                       setPreview(null)
                     }}
                     className="absolute top-4 right-4 p-2 bg-secondary rounded-full text-text-secondary hover:text-text-primary"
+                    aria-label="Remove image"
                   >
                     ×
                   </button>

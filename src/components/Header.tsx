@@ -38,7 +38,7 @@ export default function Header() {
           )}
         >
           <Link
-            to="/"
+            to="/" viewTransition
             className={cn(
               'text-xl font-semibold text-text-primary',
               'hover:text-accent-primary transition-colors',

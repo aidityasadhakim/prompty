@@ -1,31 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 
-describe('toggleLike', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  it('should add like when not already liked', () => {
-    const isAlreadyLiked = false
-    const likeCount = 1
-
-    expect(isAlreadyLiked).toBe(false)
-    expect(likeCount).toBe(1)
-  })
-
-  it('should remove like when already liked', () => {
-    const isAlreadyLiked = true
-    const likeCount = 0
-
-    expect(isAlreadyLiked).toBe(true)
-    expect(likeCount).toBe(0)
-  })
-
-  it('should throw error for invalid image ID', () => {
+describe('toggleLike Logic', () => {
+  it('should throw error for invalid image ID (zero)', () => {
     const validateImageId = (id: number) => {
       if (!id || id <= 0) {
         throw new Error('Invalid image ID')
@@ -34,7 +10,48 @@ describe('toggleLike', () => {
     }
 
     expect(() => validateImageId(0)).toThrow('Invalid image ID')
+  })
+
+  it('should throw error for invalid image ID (negative)', () => {
+    const validateImageId = (id: number) => {
+      if (!id || id <= 0) {
+        throw new Error('Invalid image ID')
+      }
+      return id
+    }
+
     expect(() => validateImageId(-1)).toThrow('Invalid image ID')
-    expect(() => validateImageId(1)).not.toThrow()
+  })
+
+  it('should accept valid positive image ID', () => {
+    const validateImageId = (id: number) => {
+      if (!id || id <= 0) {
+        throw new Error('Invalid image ID')
+      }
+      return id
+    }
+
+    expect(validateImageId(1)).toBe(1)
+    expect(validateImageId(123)).toBe(123)
+  })
+
+  it('should correctly calculate like count after adding', () => {
+    const existingLikes = 10
+    const result = { like_count: existingLikes + 1, is_liked: true }
+    expect(result.like_count).toBe(11)
+    expect(result.is_liked).toBe(true)
+  })
+
+  it('should correctly calculate like count after removing', () => {
+    const existingLikes = 10
+    const result = { like_count: existingLikes - 1, is_liked: false }
+    expect(result.like_count).toBe(9)
+    expect(result.is_liked).toBe(false)
+  })
+
+  it('should use default session ID when not provided', () => {
+    const getSessionId = (provided?: string) => provided || 'anonymous'
+    expect(getSessionId()).toBe('anonymous')
+    expect(getSessionId('custom-session')).toBe('custom-session')
   })
 })

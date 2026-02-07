@@ -8,8 +8,6 @@ export const Route = createFileRoute('/image/$imageId')({
   component: ImageDetailsPage,
 })
 
-interface ImageDetailsPageProps {}
-
 function ImageDetailsPage() {
   const { imageId } = useParams({ from: '/image/$imageId' })
 
@@ -66,7 +64,7 @@ function ImageDetailsPage() {
           <div className="relative">
             <img
               src={data.image.r2_url}
-              alt={`Image ${data.image.id}`}
+              alt={`AI generated image #${data.image.id}`}
               className="w-full rounded-xl"
             />
             <div className="absolute top-4 right-4 flex gap-2">
@@ -77,12 +75,16 @@ function ImageDetailsPage() {
                     ? 'bg-accent-primary text-white'
                     : 'bg-secondary/80 backdrop-blur-sm text-text-secondary hover:text-accent-primary',
                 )}
+                aria-label={data.is_liked ? 'Remove like' : 'Like this image'}
               >
                 <Heart
                   className={cn('w-5 h-5', data.is_liked && 'fill-current')}
                 />
               </button>
-              <button className="p-3 rounded-full bg-secondary/80 backdrop-blur-sm text-text-secondary hover:text-text-primary transition-all">
+              <button
+                className="p-3 rounded-full bg-secondary/80 backdrop-blur-sm text-text-secondary hover:text-text-primary transition-all"
+                aria-label="Share this image"
+              >
                 <Share2 className="w-5 h-5" />
               </button>
             </div>

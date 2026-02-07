@@ -1,32 +1,44 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { Zap, Image, Download, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+export const Route = createFileRoute('/')({
+  component: LandingPage,
+})
 
 export default function LandingPage() {
   const features = [
     {
-      icon: <Image className="w-8 h-8 text-accent-primary" />,
+      icon: <Image className="w-8 h-8 text-accent-primary" aria-hidden="true" />,
       title: 'Curated Gallery',
       description:
         'Discover high-quality AI-generated images with detailed metadata',
     },
     {
-      icon: <Download className="w-8 h-8 text-accent-secondary" />,
+      icon: <Download className="w-8 h-8 text-accent-secondary" aria-hidden="true" />,
       title: 'JSON Export',
       description:
         'Export structured metadata for your own AI generation workflows',
     },
     {
-      icon: <Sparkles className="w-8 h-8 text-accent-tertiary" />,
+      icon: <Sparkles className="w-8 h-8 text-accent-tertiary" aria-hidden="true" />,
       title: 'Trending Content',
       description:
         'Explore the most popular images and styles in the community',
     },
     {
-      icon: <Zap className="w-8 h-8 text-accent-primary" />,
+      icon: <Zap className="w-8 h-8 text-accent-primary" aria-hidden="true" />,
       title: 'Fast Search',
       description:
         'Find exactly what you need with powerful filtering and search',
     },
+  ]
+
+  const galleryPreviews = [
+    { alt: 'Dark gradient preview showing deep blue tones', color: '#05060b' },
+    { alt: 'Dark slate gradient preview with rich texture', color: '#12141c' },
+    { alt: 'Teal and green gradient preview in dark tones', color: '#2A4245' },
+    { alt: 'Purple accent gradient preview with subtle violet hues', color: '#6074DD' },
   ]
 
   return (
@@ -59,7 +71,7 @@ export default function LandingPage() {
                   'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
                 )}
               >
-                <Image className="w-5 h-5" />
+                <Image className="w-5 h-5" aria-hidden="true" />
                 Explore Gallery
               </a>
               <a
@@ -77,54 +89,27 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-300">
-            <div
-              className={cn(
-                'aspect-square rounded-2xl overflow-hidden',
-                'bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20',
-              )}
-            >
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%2305060b' width='100' height='100'/%3E%3C/svg%3E"
-                alt="Gallery preview"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div
-              className={cn(
-                'aspect-square rounded-2xl overflow-hidden',
-                'bg-gradient-to-bl from-accent-secondary/20 to-accent-tertiary/20',
-              )}
-            >
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%2312141c' width='100' height='100'/%3E%3C/svg%3E"
-                alt="Gallery preview"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div
-              className={cn(
-                'aspect-square rounded-2xl overflow-hidden',
-                'bg-gradient-to-tr from-accent-tertiary/20 to-accent-primary/20',
-              )}
-            >
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%232A4245' width='100' height='100'/%3E%3C/svg%3E"
-                alt="Gallery preview"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div
-              className={cn(
-                'aspect-square rounded-2xl overflow-hidden',
-                'bg-gradient-to-tl from-accent-primary/10 to-accent-secondary/10',
-              )}
-            >
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%236074DD' width='100' height='100' opacity='0.1'/%3E%3C/svg%3E"
-                alt="Gallery preview"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            {galleryPreviews.map((preview, index) => (
+              <div
+                key={index}
+                className={cn(
+                  'aspect-square rounded-2xl overflow-hidden',
+                  index === 0
+                    ? 'bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20'
+                    : index === 1
+                    ? 'bg-gradient-to-bl from-accent-secondary/20 to-accent-tertiary/20'
+                    : index === 2
+                    ? 'bg-gradient-to-tr from-accent-tertiary/20 to-accent-primary/20'
+                    : 'bg-gradient-to-tl from-accent-primary/10 to-accent-secondary/10',
+                )}
+              >
+                <img
+                  src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='${encodeURIComponent(preview.color)}' width='100' height='100'/%3E%3C/svg%3E`}
+                  alt={preview.alt}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -179,7 +164,7 @@ export default function LandingPage() {
               'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
             )}
           >
-            <Image className="w-5 h-5" />
+            <Image className="w-5 h-5" aria-hidden="true" />
             Browse Gallery
           </a>
         </div>

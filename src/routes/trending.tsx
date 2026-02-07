@@ -3,12 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { ImageCard } from '@/components/ImageCard'
 import { cn } from '@/lib/utils'
 import { TrendingUp } from 'lucide-react'
+import type { GalleryImage } from '@/lib/schema'
 
 export const Route = createFileRoute('/trending')({
   component: TrendingPage,
 })
-
-interface TrendingPageProps {}
 
 function TrendingPage() {
   const { data, isLoading, error } = useQuery({
@@ -57,7 +56,7 @@ function TrendingPage() {
               'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
             )}
           >
-            {data.data.map((image: { id: number }) => (
+            {data.data.map((image: GalleryImage) => (
               <ImageCard key={image.id} image={image} />
             ))}
           </div>

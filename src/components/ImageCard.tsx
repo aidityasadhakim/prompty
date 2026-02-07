@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Heart } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { GalleryImage } from '@/lib/schema'
+import type { GalleryImage } from '@/lib/schema'
 
 interface ImageCardProps {
   image: GalleryImage
@@ -30,7 +30,7 @@ export function ImageCard({ image, onLike, isLiked = false }: ImageCardProps) {
     >
       <img
         src={image.r2_url}
-        alt={`Image ${image.id}`}
+        alt={`AI generated image #${image.id}`}
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         loading="lazy"
       />
@@ -46,7 +46,7 @@ export function ImageCard({ image, onLike, isLiked = false }: ImageCardProps) {
               ? 'bg-accent-primary text-white'
               : 'bg-secondary/80 backdrop-blur-sm text-text-secondary hover:text-accent-primary',
           )}
-          aria-label={liked ? 'Unlike' : 'Like'}
+          aria-label={liked ? 'Remove like' : 'Like this image'}
         >
           <Heart className={cn('w-4 h-4', liked && 'fill-current')} />
         </button>
