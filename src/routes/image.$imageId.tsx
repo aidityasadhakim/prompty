@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Download, Heart, Share2 } from 'lucide-react'
 import { Image } from '@unpic/react'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 import { NotFound } from '@/components/NotFound'
 
@@ -12,6 +13,7 @@ export const Route = createFileRoute('/image/$imageId')({
 
 function ImageDetailsPage() {
   const { imageId } = useParams({ from: '/image/$imageId' })
+  const [imageError, setImageError] = useState(false)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['image', imageId],
@@ -76,16 +78,39 @@ function ImageDetailsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="relative">
-            <Image
-              src={data.image.r2_url}
-              alt={`AI generated image #${data.image.id}`}
-              layout="constrained"
-              width={1200}
-              height={1600}
-              className="w-full rounded-xl"
-              loading="eager"
-              decoding="async"
-            />
+            {imageError ? (
+              <div className="w-full aspect-[3/4] flex flex-col items-center justify-center bg-secondary/30 text-text-secondary p-12 rounded-xl">
+                <svg
+                  className="w-24 h-24 mb-4 opacity-50"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <p className="text-lg text-center">Image not available</p>
+                <p className="text-sm text-text-muted mt-2">
+                  The image file could not be loaded
+                </p>
+              </div>
+            ) : (
+              <Image
+                src={data.image.r2_url}
+                alt={`AI generated image #${data.image.id}`}
+                layout="constrained"
+                width={1200}
+                height={1600}
+                className="w-full rounded-xl"
+                loading="eager"
+                decoding="async"
+                onError={() => setImageError(true)}
+              />
+            )}
             <div className="absolute top-4 right-4 flex gap-2">
               <button
                 className={cn(
