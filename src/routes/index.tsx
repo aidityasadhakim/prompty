@@ -1,118 +1,195 @@
-import { createFileRoute } from '@tanstack/react-router'
-import {
-  Zap,
-  Server,
-  Route as RouteIcon,
-  Shield,
-  Waves,
-  Sparkles,
-} from 'lucide-react'
+import { Zap, Image, Download, Sparkles } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-export const Route = createFileRoute('/')({ component: App })
-
-function App() {
+export default function LandingPage() {
   const features = [
     {
-      icon: <Zap className="w-12 h-12 text-cyan-400" />,
-      title: 'Powerful Server Functions',
+      icon: <Image className="w-8 h-8 text-accent-primary" />,
+      title: 'Curated Gallery',
       description:
-        'Write server-side code that seamlessly integrates with your client components. Type-safe, secure, and simple.',
+        'Discover high-quality AI-generated images with detailed metadata',
     },
     {
-      icon: <Server className="w-12 h-12 text-cyan-400" />,
-      title: 'Flexible Server Side Rendering',
+      icon: <Download className="w-8 h-8 text-accent-secondary" />,
+      title: 'JSON Export',
       description:
-        'Full-document SSR, streaming, and progressive enhancement out of the box. Control exactly what renders where.',
+        'Export structured metadata for your own AI generation workflows',
     },
     {
-      icon: <RouteIcon className="w-12 h-12 text-cyan-400" />,
-      title: 'API Routes',
+      icon: <Sparkles className="w-8 h-8 text-accent-tertiary" />,
+      title: 'Trending Content',
       description:
-        'Build type-safe API endpoints alongside your application. No separate backend needed.',
+        'Explore the most popular images and styles in the community',
     },
     {
-      icon: <Shield className="w-12 h-12 text-cyan-400" />,
-      title: 'Strongly Typed Everything',
+      icon: <Zap className="w-8 h-8 text-accent-primary" />,
+      title: 'Fast Search',
       description:
-        'End-to-end type safety from server to client. Catch errors before they reach production.',
-    },
-    {
-      icon: <Waves className="w-12 h-12 text-cyan-400" />,
-      title: 'Full Streaming Support',
-      description:
-        'Stream data from server to client progressively. Perfect for AI applications and real-time updates.',
-    },
-    {
-      icon: <Sparkles className="w-12 h-12 text-cyan-400" />,
-      title: 'Next Generation Ready',
-      description:
-        'Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.',
+        'Find exactly what you need with powerful filtering and search',
     },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <section className="relative py-20 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10"></div>
-        <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <img
-              src="/tanstack-circle-logo.png"
-              alt="TanStack Logo"
-              className="w-24 h-24 md:w-32 md:h-32"
-            />
-            <h1 className="text-6xl md:text-7xl font-black text-white [letter-spacing:-0.08em]">
-              <span className="text-gray-300">TANSTACK</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                START
+    <div className="min-h-screen bg-background-primary">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/5 via-transparent to-accent-secondary/5" />
+
+        <div className="relative container mx-auto px-4 py-20 text-center">
+          <div className="animate-fade-in-up">
+            <h1 className="text-5xl md:text-7xl font-bold text-text-primary mb-6 tracking-tight">
+              AI Image
+              <span className="block bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent">
+                Prompt Gallery
               </span>
             </h1>
-          </div>
-          <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light">
-            The framework for next generation AI applications
-          </p>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-            Full-stack framework powered by TanStack Router for React and Solid.
-            Build modern applications with server functions, streaming, and type
-            safety.
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href="https://tanstack.com/start"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50"
-            >
-              Documentation
-            </a>
-            <p className="text-gray-400 text-sm mt-2">
-              Begin your TanStack Start journey by editing{' '}
-              <code className="px-2 py-1 bg-slate-700 rounded text-cyan-400">
-                /src/routes/index.tsx
-              </code>
+
+            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto mb-10">
+              Discover, explore, and export AI-generated images with complete
+              structured metadata. Your creative companion for AI art
+              generation.
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/gallery"
+                className={cn(
+                  'inline-flex items-center gap-2',
+                  'px-8 py-4 bg-accent-primary text-white font-semibold rounded-xl',
+                  'hover:bg-accent-hover transition-all duration-300',
+                  'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
+                )}
+              >
+                <Image className="w-5 h-5" />
+                Explore Gallery
+              </a>
+              <a
+                href="#features"
+                className={cn(
+                  'inline-flex items-center gap-2',
+                  'px-8 py-4 bg-secondary text-text-primary font-semibold rounded-xl',
+                  'hover:bg-secondary/80 transition-all duration-300',
+                  'border border-border-default',
+                )}
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-300">
+            <div
+              className={cn(
+                'aspect-square rounded-2xl overflow-hidden',
+                'bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20',
+              )}
+            >
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%2305060b' width='100' height='100'/%3E%3C/svg%3E"
+                alt="Gallery preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={cn(
+                'aspect-square rounded-2xl overflow-hidden',
+                'bg-gradient-to-bl from-accent-secondary/20 to-accent-tertiary/20',
+              )}
+            >
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%2312141c' width='100' height='100'/%3E%3C/svg%3E"
+                alt="Gallery preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={cn(
+                'aspect-square rounded-2xl overflow-hidden',
+                'bg-gradient-to-tr from-accent-tertiary/20 to-accent-primary/20',
+              )}
+            >
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%232A4245' width='100' height='100'/%3E%3C/svg%3E"
+                alt="Gallery preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={cn(
+                'aspect-square rounded-2xl overflow-hidden',
+                'bg-gradient-to-tl from-accent-primary/10 to-accent-secondary/10',
+              )}
+            >
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%236074DD' width='100' height='100' opacity='0.1'/%3E%3C/svg%3E"
+                alt="Gallery preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
-            >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+      <section id="features" className="py-24 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-text-primary text-center mb-4">
+            Why Prompty?
+          </h2>
+          <p className="text-text-secondary text-center max-w-2xl mx-auto mb-16">
+            Built for AI art creators who want quality metadata and seamless
+            workflows.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className={cn(
+                  'group p-6 rounded-2xl',
+                  'bg-secondary/30 border border-border-default',
+                  'hover:border-accent-primary/50 transition-all duration-300',
+                  'hover:shadow-lg hover:shadow-accent-primary/10',
+                )}
+              >
+                <div className="mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-text-secondary">{feature.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+
+      <section className="py-24">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-text-primary mb-6">
+            Ready to explore?
+          </h2>
+          <p className="text-text-secondary text-xl max-w-2xl mx-auto mb-10">
+            Start discovering AI-generated images with complete, structured
+            metadata today.
+          </p>
+          <a
+            href="/gallery"
+            className={cn(
+              'inline-flex items-center gap-2',
+              'px-8 py-4 bg-accent-primary text-white font-semibold rounded-xl',
+              'hover:bg-accent-hover transition-all duration-300',
+              'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
+            )}
+          >
+            <Image className="w-5 h-5" />
+            Browse Gallery
+          </a>
+        </div>
+      </section>
+
+      <footer className="py-8 border-t border-border-default">
+        <div className="container mx-auto px-4 text-center text-text-muted">
+          <p>© 2026 Prompty. AI Image Prompt Gallery.</p>
+        </div>
+      </footer>
     </div>
   )
 }
