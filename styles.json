@@ -1,0 +1,87 @@
+{
+  "theme": {
+    "mode": "dark",
+    "colors": {
+      "background": {
+        "primary": "#05060b",
+        "secondary": "#12141c",
+        "tertiary": "#2A4245"
+      },
+      "text": {
+        "primary": "#FFFFFF",
+        "secondary": "#a1a1aa",
+        "muted": "#71717a"
+      },
+      "border": {
+        "default": "#2A4245",
+        "active": "#6074DD"
+      },
+      "accent": {
+        "primary": "#6074DD",
+        "secondary": "#56D6DA",
+        "tertiary": "#7FE660",
+        "hover": "#4c5bb5"
+      }
+    },
+    "typography": {
+      "fontFamily": "Poppins, system-ui, sans-serif",
+      "weights": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600
+      },
+      "sizes": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "base": "1rem",
+        "lg": "1.125rem",
+        "xl": "1.25rem",
+        "2xl": "1.5rem"
+      }
+    },
+    "layout": {
+      "container": {
+        "maxWidth": "1920px",
+        "padding": "1.5rem"
+      },
+      "grid": {
+        "type": "masonry",
+        "columns": {
+          "sm": 2,
+          "md": 3,
+          "lg": 4,
+          "xl": 5,
+          "2xl": 6
+        },
+        "gap": "1rem"
+      }
+    },
+    "components": {
+      "header": {
+        "height": "64px",
+        "background": "transparent",
+        "blur": "none",
+        "padding": "1rem 2rem"
+      },
+      "searchBar": {
+        "height": "48px",
+        "borderRadius": "1rem",
+        "background": "#12141c",
+        "borderColor": "#2A4245",
+        "textColor": "#FFFFFF",
+        "focusBorder": "#6074DD",
+        "iconColor": "#56D6DA"
+      },
+      "galleryCard": {
+        "borderRadius": "1rem",
+        "overflow": "hidden",
+        "hoverEffect": "brightness-110",
+        "overlayGradient": "linear-gradient(to top, rgba(5,6,11,0.9), transparent)"
+      },
+      "buttons": {
+        "radius": "0.75rem",
+        "ghostHover": "#2A4245"
+      }
+    }
+  }
+}
