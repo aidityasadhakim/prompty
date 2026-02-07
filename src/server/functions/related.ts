@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import type { GalleryImage } from '@/lib/schema'
 import { getDb } from '@/lib/db'
-import { getThumbnailUrl } from '@/lib/r2'
+import { getThumbnailUrl, parseStyleTags } from '@/lib/r2'
 
 export const getRelatedImages = createServerFn({
   method: 'GET',
@@ -23,7 +23,7 @@ export const getRelatedImages = createServerFn({
       return { data: [] }
     }
 
-    const styleTags = JSON.parse(originalImage.style_tags) as Array<string>
+    const styleTags = parseStyleTags(originalImage.style_tags)
     const primaryStyle = styleTags[0] || ''
 
     let query = ''
@@ -103,7 +103,7 @@ export const getRelatedImages = createServerFn({
       id: row.id,
       r2_url: getThumbnailUrl(row.r2_url),
       aspect_ratio: row.aspect_ratio,
-      style_tags: JSON.parse(row.style_tags) as Array<string>,
+      style_tags: parseStyleTags(row.style_tags),
       quality: row.quality,
       like_count: likeCountMap.get(row.id) || 0,
       created_at: row.created_at,

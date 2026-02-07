@@ -5,7 +5,7 @@ import { Image } from '@unpic/react'
 import type { CharacterLock, ImageMeta, Scene, Subject } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { ASPECT_RATIOS, STYLE_TAGS } from '@/lib/schema'
-import { confirmUpload, uploadImage } from '@/server/functions/upload'
+import { uploadImage } from '@/server/functions/upload'
 
 export const Route = createFileRoute('/upload')({
   component: UploadPage,
@@ -57,6 +57,8 @@ function UploadPage() {
     product_placement: '',
   })
 
+  const [jsonText, setJsonText] = useState('')
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
@@ -89,37 +91,40 @@ function UploadPage() {
     setUploadError(null)
 
     try {
-      const metadata = {
-        meta,
-        character_lock: characterLock,
-        scene,
-        subject,
+      // Use edited JSON if available, otherwise use state
+      let metadata
+      if (jsonText) {
+        try {
+          metadata = JSON.parse(jsonText)
+        } catch (e) {
+          throw new Error('Invalid JSON format. Please check your input.')
+        }
+      } else {
+        metadata = {
+          meta,
+          character_lock: characterLock,
+          scene,
+          subject,
+        }
       }
 
-      // Step 1: Get pre-signed upload URL
-      const { uploadUrl, publicUrl } = await uploadImage({
-        data: {
-          filename: file.name,
-          metadata,
-        },
+      // Convert file to base64
+      const fileData = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const base64 = (reader.result as string).split(',')[1]
+          resolve(base64)
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(file)
       })
 
-      // Step 2: Upload file directly to R2
-      const uploadResponse = await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
-      })
-
-      if (!uploadResponse.ok) throw new Error('Failed to upload file to R2')
-
-      // Step 3: Confirm upload and create DB records
-      await confirmUpload({
+      // Upload to server (server will upload to R2)
+      await uploadImage({
         data: {
+          fileData,
           filename: file.name,
-          r2_url: publicUrl,
+          contentType: file.type,
           metadata,
         },
       })
@@ -158,7 +163,7 @@ function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen bg-background-primary pt-16">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-semibold text-text-primary mb-8">
           Upload Image
@@ -373,19 +378,36 @@ function UploadPage() {
                 <h2 className="text-xl font-semibold text-text-primary">
                   Review & Submit
                 </h2>
-                <button className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg text-text-secondary hover:text-text-primary transition-colors">
+                <button
+                  onClick={() => {
+                    const fullMetadata = {
+                      meta,
+                      character_lock: characterLock,
+                      scene,
+                      subject,
+                    }
+                    setJsonText(JSON.stringify(fullMetadata, null, 2))
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg text-text-secondary hover:text-text-primary transition-colors"
+                >
                   <FileJson className="w-4 h-4" />
-                  Preview JSON
+                  Load JSON
                 </button>
               </div>
 
-              <div className="bg-secondary/50 rounded-lg p-4 text-sm font-mono text-text-secondary overflow-auto max-h-64">
-                {JSON.stringify(
-                  { meta, character_lock: characterLock, scene, subject },
-                  null,
-                  2,
-                )}
-              </div>
+              <textarea
+                value={
+                  jsonText ||
+                  JSON.stringify(
+                    { meta, character_lock: characterLock, scene, subject },
+                    null,
+                    2,
+                  )
+                }
+                onChange={(e) => setJsonText(e.target.value)}
+                className="w-full bg-secondary/50 rounded-lg p-4 text-sm font-mono text-text-secondary h-64 resize-y border border-border-default focus:border-accent-primary focus:outline-none"
+                placeholder="Edit JSON metadata here..."
+              />
 
               {uploadError && (
                 <p className="text-red-400 text-sm text-center">

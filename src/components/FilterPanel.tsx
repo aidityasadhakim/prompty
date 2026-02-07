@@ -1,6 +1,13 @@
 import type { AspectRatio, StyleTag } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { ASPECT_RATIOS, STYLE_TAGS } from '@/lib/schema'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface FilterPanelProps {
   selectedAspectRatio: AspectRatio | null
@@ -18,69 +25,59 @@ export function FilterPanel({
   className,
 }: FilterPanelProps) {
   return (
-    <div className={cn('space-y-6', className)}>
-      <div>
-        <h3 className="text-sm font-medium text-text-secondary mb-3">
-          Aspect Ratio
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => onAspectRatioChange(null)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded-lg transition-colors',
-              !selectedAspectRatio
-                ? 'bg-accent-primary text-white'
-                : 'bg-secondary text-text-secondary hover:bg-secondary/80',
-            )}
-          >
-            All
-          </button>
-          {ASPECT_RATIOS.map((ratio) => (
-            <button
-              key={ratio}
-              onClick={() => onAspectRatioChange(ratio)}
-              className={cn(
-                'px-3 py-1.5 text-sm rounded-lg transition-colors',
-                selectedAspectRatio === ratio
-                  ? 'bg-accent-primary text-white'
-                  : 'bg-secondary text-text-secondary hover:bg-secondary/80',
-              )}
-            >
-              {ratio}
-            </button>
-          ))}
-        </div>
+    <div className={cn('flex gap-4 items-center', className)}>
+      <div className="flex items-center gap-2">
+        <label
+          htmlFor="aspect-ratio-select"
+          className="text-sm font-medium text-text-secondary whitespace-nowrap"
+        >
+          Aspect Ratio:
+        </label>
+        <Select
+          value={selectedAspectRatio ?? 'all'}
+          onValueChange={(value) =>
+            onAspectRatioChange(value === 'all' ? null : (value as AspectRatio))
+          }
+        >
+          <SelectTrigger id="aspect-ratio-select" className="w-[180px]">
+            <SelectValue placeholder="Select aspect ratio" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            {ASPECT_RATIOS.map((ratio) => (
+              <SelectItem key={ratio} value={ratio}>
+                {ratio}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <div>
-        <h3 className="text-sm font-medium text-text-secondary mb-3">Style</h3>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => onStyleChange(null)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded-lg transition-colors',
-              !selectedStyle
-                ? 'bg-accent-primary text-white'
-                : 'bg-secondary text-text-secondary hover:bg-secondary/80',
-            )}
-          >
-            All
-          </button>
-          {STYLE_TAGS.map((style) => (
-            <button
-              key={style}
-              onClick={() => onStyleChange(style)}
-              className={cn(
-                'px-3 py-1.5 text-sm rounded-lg transition-colors',
-                selectedStyle === style
-                  ? 'bg-accent-primary text-white'
-                  : 'bg-secondary text-text-secondary hover:bg-secondary/80',
-              )}
-            >
-              {style}
-            </button>
-          ))}
-        </div>
+      <div className="flex items-center gap-2">
+        <label
+          htmlFor="style-select"
+          className="text-sm font-medium text-text-secondary whitespace-nowrap"
+        >
+          Style:
+        </label>
+        <Select
+          value={selectedStyle ?? 'all'}
+          onValueChange={(value) =>
+            onStyleChange(value === 'all' ? null : (value as StyleTag))
+          }
+        >
+          <SelectTrigger id="style-select" className="w-[180px]">
+            <SelectValue placeholder="Select style" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            {STYLE_TAGS.map((style) => (
+              <SelectItem key={style} value={style}>
+                {style}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   )

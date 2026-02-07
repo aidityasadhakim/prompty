@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Agentation } from 'agentation'
 
 import Header from '../components/Header'
 import { NotFound } from '../components/NotFound'
@@ -57,6 +58,7 @@ function RootDocument() {
       <body>
         <Header />
         <Outlet />
+        {process.env.NODE_ENV === 'development' && <Agentation />}
         <TanStackDevtools
           config={{
             position: 'bottom-right',

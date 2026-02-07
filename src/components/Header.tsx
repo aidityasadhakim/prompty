@@ -1,25 +1,50 @@
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Home, Lock, Menu, TrendingUp, Upload, X } from 'lucide-react'
+import { Home, Lock, LogOut, Menu, TrendingUp, Upload, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
+import { adminLogout } from '@/server/functions/admin'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { isAdmin } = useAuth()
 
-  const navItems = [
+  const baseNavItems = [
     { to: '/', label: 'Explore', icon: Home },
     // Gallery link removed
     { to: '/trending', label: 'Trending', icon: TrendingUp },
-    { to: '/upload', label: 'Upload', icon: Upload },
-    { to: '/admin', label: 'Admin', icon: Lock },
   ]
+
+  const adminNavItems = [{ to: '/upload', label: 'Upload', icon: Upload }]
+
+  const loginNavItem = { to: '/admin', label: 'Login', icon: Lock }
+
+  const navItems = isAdmin
+    ? [...baseNavItems, ...adminNavItems]
+    : [...baseNavItems, loginNavItem]
 
   const isActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/'
     }
     return location.pathname.startsWith(path)
+  }
+
+  const handleLogout = async () => {
+    const sessionId = localStorage.getItem('sessionId')
+    if (sessionId) {
+      try {
+        await adminLogout({ data: { sessionId } })
+      } catch (error) {
+        console.error('Logout error:', error)
+      }
+      localStorage.removeItem('sessionId')
+    }
+    setIsOpen(false)
+    navigate({ to: '/' })
+    window.location.reload()
   }
 
   return (
@@ -66,6 +91,19 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+            {isAdmin && (
+              <button
+                onClick={handleLogout}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-2 rounded-lg',
+                  'text-sm font-medium transition-colors',
+                  'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
+                )}
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            )}
           </nav>
 
           <button
@@ -129,6 +167,19 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+            {isAdmin && (
+              <button
+                onClick={handleLogout}
+                className={cn(
+                  'flex items-center gap-3 px-4 py-3 rounded-lg w-full',
+                  'text-sm font-medium transition-colors',
+                  'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
+                )}
+              >
+                <LogOut className="w-5 h-5" />
+                Logout
+              </button>
+            )}
           </div>
         </nav>
       </aside>

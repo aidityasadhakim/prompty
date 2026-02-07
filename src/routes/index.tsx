@@ -50,13 +50,12 @@ function LandingPage() {
             </div>
           </div>
 
-          <div className="w-full overflow-x-auto pb-2">
+          <div className="w-full">
             <FilterPanel
               selectedAspectRatio={aspectRatio}
               selectedStyle={style}
               onAspectRatioChange={setAspectRatio}
               onStyleChange={setStyle}
-              className="flex flex-row gap-8 space-y-0"
             />
           </div>
 

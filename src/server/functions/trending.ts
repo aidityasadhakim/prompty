@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import type { GalleryImage } from '@/lib/schema'
 import { getDb } from '@/lib/db'
-import { getThumbnailUrl } from '@/lib/r2'
+import { getThumbnailUrl, parseStyleTags } from '@/lib/r2'
 
 export const getTrendingImages = createServerFn({
   method: 'GET',
@@ -55,7 +55,7 @@ export const getTrendingImages = createServerFn({
       id: row.id,
       r2_url: getThumbnailUrl(row.r2_url),
       aspect_ratio: row.aspect_ratio,
-      style_tags: JSON.parse(row.style_tags) as Array<string>,
+      style_tags: parseStyleTags(row.style_tags),
       quality: row.quality,
       like_count: row.like_count,
       created_at: row.created_at,

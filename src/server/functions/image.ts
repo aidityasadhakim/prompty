@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import type { ImageWithFullMetadata } from '@/lib/schema'
 import { getDb } from '@/lib/db'
-import { getFullImageUrl } from '@/lib/r2'
+import { getFullImageUrl, parseStyleTags } from '@/lib/r2'
 
 export const getImageById = createServerFn({
   method: 'GET',
@@ -68,12 +68,23 @@ export const getImageById = createServerFn({
       }
       const likeCount = likesResult.like_count
 
+      const parsedMetaData = JSON.parse(metadata.meta_data) as any
+
+      // Ensure style is always an array
+      if (parsedMetaData.style && typeof parsedMetaData.style === 'string') {
+        parsedMetaData.style = parseStyleTags(
+          JSON.stringify(parsedMetaData.style),
+        )
+      } else if (!Array.isArray(parsedMetaData.style)) {
+        parsedMetaData.style = []
+      }
+
       return {
         image: {
           id: image.id,
           r2_url: getFullImageUrl(image.r2_url),
           aspect_ratio: image.aspect_ratio,
-          style_tags: JSON.parse(image.style_tags) as Array<string>,
+          style_tags: parseStyleTags(image.style_tags),
           quality: image.quality,
           created_at: image.created_at,
           updated_at: image.updated_at,
@@ -81,7 +92,7 @@ export const getImageById = createServerFn({
         metadata: {
           id: metadata.id,
           image_id: metadata.image_id,
-          meta_data: JSON.parse(metadata.meta_data),
+          meta_data: parsedMetaData,
           character_lock: metadata.character_lock
             ? JSON.parse(metadata.character_lock)
             : null,
