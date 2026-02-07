@@ -1150,4 +1150,166 @@ Information about the primary subject including pose, outfit, positioning, and a
 
 ---
 
-_This document is a living specification and will be updated as the project evolves. All stakeholders should review and approve changes before implementation begins._
+## 16. Landing Page Requirements
+
+### 16.1 Design Philosophy
+
+The landing page must avoid the "AI slop" aesthetic at all costs:
+
+- NO purple/blue gradients on white backgrounds
+- NO generic fonts (Inter, Roboto, Arial, system-ui)
+- NO predictable hero-CTA-features-testimonials templates
+- NO generic geometric shapes or abstract blobs
+- NO stock-looking imagery or clichéd visuals
+
+### 16.2 Theme Configuration
+
+**Color Palette (Dark Mode):**
+
+| Category             | Color           | Hex Value |
+| -------------------- | --------------- | --------- |
+| Background Primary   | Deep dark       | #05060b   |
+| Background Secondary | Surface         | #12141c   |
+| Background Tertiary  | Accent surface  | #2A4245   |
+| Text Primary         | Pure white      | #FFFFFF   |
+| Text Secondary       | Muted           | #a1a1aa   |
+| Text Muted           | Disabled        | #71717a   |
+| Border Default       | Subtle          | #2A4245   |
+| Border Active        | Focus           | #6074DD   |
+| Accent Primary       | Electric indigo | #6074DD   |
+| Accent Secondary     | Cyan            | #56D6DA   |
+| Accent Tertiary      | Green           | #7FE660   |
+| Accent Hover         | Darkened accent | #4c5bb5   |
+
+**Typography:**
+
+| Element  | Font Family         | Weight   |
+| -------- | ------------------- | -------- |
+| Headings | Poppins             | 600      |
+| Body     | Poppins / system-ui | 400, 500 |
+| Mono     | JetBrains Mono      | 400      |
+
+**Sizes:**
+
+- xs: 0.75rem
+- sm: 0.875rem
+- base: 1rem
+- lg: 1.125rem
+- xl: 1.25rem
+- 2xl: 1.5rem
+
+### 16.3 Required Sections
+
+**1. Hero Section:**
+
+- Hook that creates immediate intrigue
+- Interactive element demonstrating capability
+- Clear value proposition in ≤12 words
+- Primary CTA: "Book a makeup look" (or context-appropriate CTA)
+- Trust signals (logos, security badges)
+
+**2. Problem/Solution Narrative:**
+
+- Storytelling approach, not feature listing
+- Scroll-triggered reveals for dramatic effect
+- Real-world scenario visualization
+
+**3. Product Showcase:**
+
+- Interactive demo preview or animated mockup
+- Visual product demonstration
+- Technical credibility indicators
+
+**4. Social Proof:**
+
+- Testimonials from target personas
+- Metrics relevant to audience
+- Customer grid with hover states
+
+**5. Technical Differentiators:**
+
+- Clean comparison or feature grid
+- Integration/API preview if applicable
+- Security and compliance badges
+
+**6. Conversion Section:**
+
+- Secondary CTA with urgency
+- Quick form (Name, Email, Company)
+- Alternative action link
+
+**7. Footer:**
+
+- Minimal, sophisticated design
+- Essential links only
+- Newsletter capture
+
+### 16.4 Technical Requirements
+
+- Single HTML file with embedded CSS and JavaScript
+- Mobile-responsive with fluid typography and adaptive layouts
+- Smooth scroll behavior
+- Page load animations with staggered reveals (animation-delay)
+- Intersection Observer for scroll-triggered effects
+- Micro-interactions on hover states
+- CSS custom properties for theming
+- Semantic HTML5 structure
+- Performance-optimized (no heavy libraries)
+- Load Google Fonts for typography
+
+### 16.5 Motion Design
+
+**Page Load:** Orchestrated reveal sequence (0ms → 200ms → 400ms stagger)
+
+**Scroll:** Fade-in-up with subtle parallax on key visuals
+
+**Hover:** Scale transforms, color transitions, underline animations
+
+**Background:** Subtle ambient motion (floating particles, gradient shifts)
+
+### 16.6 Component Specifications
+
+**Header:**
+
+- Height: 64px
+- Background: transparent
+- Blur: none
+- Padding: 1rem 2rem
+
+**Search Bar:**
+
+- Height: 48px
+- Border radius: 1rem
+- Background: #12141c
+- Border color: #2A4245
+- Text color: #FFFFFF
+- Focus border: #6074DD
+- Icon color: #56D6DA
+
+**Buttons:**
+
+- Border radius: 0.75rem
+- Ghost hover: #2A4245
+
+**Gallery Card:**
+
+- Border radius: 1rem
+- Overflow: hidden
+- Hover effect: brightness-110
+- Overlay gradient: linear-gradient(to top, rgba(5,6,11,0.9), transparent)
+
+### 16.7 Layout Configuration
+
+**Container:**
+
+- Max width: 1920px
+- Padding: 1.5rem
+
+**Grid (Masonry):**
+
+- Columns: sm=2, md=3, lg=4, xl=5, 2xl=6
+- Gap: 1rem
+
+---
+
+_This section added for landing page generation specifications based on design guidelines and style system._

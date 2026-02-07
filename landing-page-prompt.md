@@ -12,12 +12,13 @@ Indonesian
 
 <design_philosophy>
 Create a design that would win design awards. Avoid the "AI slop" aesthetic at all costs:
+
 - NO purple/blue gradients on white backgrounds
 - NO generic fonts (Inter, Roboto, Arial, system-ui)
 - NO predictable hero-CTA-features-testimonials templates
 - NO generic geometric shapes or abstract blobs
 - NO stock-looking imagery or clichéd visuals
-</design_philosophy>
+  </design_philosophy>
 
 <aesthetic_direction>
 read styles.json for design directions
@@ -62,9 +63,10 @@ Build these sections with creative interpretation:
    - Minimal, sophisticated
    - Essential links only
    - Newsletter capture
-</required_sections>
+     </required_sections>
 
 <technical_requirements>
+
 - Single HTML file with embedded CSS and JavaScript
 - Mobile-responsive (fluid typography, adaptive layouts)
 - Smooth scroll behavior
@@ -75,30 +77,34 @@ Build these sections with creative interpretation:
 - Semantic HTML5 structure
 - Performance-optimized (no heavy libraries)
 - Load Google Fonts for typography
-</technical_requirements>
+  </technical_requirements>
 
 <motion_design>
 Implement these animation principles:
+
 - **Page Load**: Orchestrated reveal sequence (0ms → 200ms → 400ms stagger)
 - **Scroll**: Fade-in-up with subtle parallax on key visuals
 - **Hover**: Scale transforms, color transitions, underline animations
 - **Background**: Subtle ambient motion (floating particles, gradient shifts)
-</motion_design>
+  </motion_design>
 
 <color_guidance>
 If you choose a dark theme:
+
 - Deep background: #0a0a0f to #12121a range
 - Text: Pure white (#ffffff) for headlines, muted (#a0a0a0) for body
 - Accent: ONE bold color used sparingly (electric cyan, hot coral, acid green)
 
 If you choose a light theme:
+
 - Background: Off-white or cream (not pure white)
 - Text: Deep charcoal (not pure black)
 - Accent: Bold, unexpected (terracotta, forest, sapphire)
-</color_guidance>
+  </color_guidance>
 
 <typography_direction>
 Pick a distinctive combination:
+
 - Headlines: Display serif (Playfair Display) or Geometric sans (Clash Display, Cabinet Grotesk)
 - Body: Readable with character (Source Serif Pro, Satoshi)
 - Mono: JetBrains Mono, IBM Plex Mono for technical elements
@@ -108,15 +114,17 @@ Avoid at all costs: Inter, Roboto, Arial, SF Pro, Open Sans
 
 <output_format>
 Deliver a single, complete HTML file that:
+
 1. Opens immediately in any browser with no dependencies
 2. Contains all CSS in a <style> tag
 3. Contains all JavaScript in a <script> tag
 4. Uses realistic placeholder content (not "Lorem ipsum")
 5. Is production-ready quality
-</output_format>
+   </output_format>
 
 <thinking_process>
 Before coding, briefly outline:
+
 1. Which aesthetic direction you're choosing and why
 2. The specific font pairing
 3. The color palette (hex values)
@@ -125,4 +133,3 @@ Before coding, briefly outline:
 
 Then build the complete page.
 </thinking_process>
-
