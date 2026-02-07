@@ -1,11 +1,12 @@
+import { useState } from 'react'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { Download, Heart, Share2 } from 'lucide-react'
 import { Image } from '@unpic/react'
-import { cn } from '@/lib/utils'
-import { useState } from 'react'
 
+import { cn } from '@/lib/utils'
 import { NotFound } from '@/components/NotFound'
+import { getImageById } from '@/server/functions/image'
 
 export const Route = createFileRoute('/image/$imageId')({
   component: ImageDetailsPage,
@@ -17,14 +18,9 @@ function ImageDetailsPage() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['image', imageId],
-    queryFn: async () => {
-      const response = await fetch(`/api/images/${imageId}`)
-      if (response.status === 404) throw new Error('NOT_FOUND')
-      if (!response.ok) throw new Error('Failed to fetch image')
-      return response.json()
-    },
+    queryFn: () => getImageById({ data: { id: Number(imageId) } }),
     retry: (failureCount, error) => {
-      if (error.message === 'NOT_FOUND') return false
+      if (error.message === 'Image not found') return false
       return failureCount < 3
     },
   })
@@ -58,8 +54,8 @@ function ImageDetailsPage() {
     )
   }
 
-  if (error?.message === 'NOT_FOUND') {
-    return <NotFound>The image you are looking for does not exist.</NotFound>
+  if (error?.message === 'Image not found') {
+    return <NotFound>Image not found</NotFound>
   }
 
   if (error || !data) {
@@ -172,7 +168,7 @@ function ImageDetailsPage() {
                 <div>
                   <span className="text-text-muted">Style:</span>
                   <div className="ml-2 flex flex-wrap gap-1">
-                    {data.metadata.meta_data.style?.map((s: string) => (
+                    {data.metadata.meta_data.style.map((s: string) => (
                       <span
                         key={s}
                         className="px-2 py-0.5 bg-accent-primary/20 text-accent-primary rounded text-xs"

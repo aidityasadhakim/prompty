@@ -5,6 +5,7 @@ import type { AspectRatio, GalleryImage, StyleTag } from '@/lib/schema'
 import { ImageCard } from '@/components/ImageCard'
 import { SearchBar } from '@/components/SearchBar'
 import { FilterPanel } from '@/components/FilterPanel'
+import { getImages } from '@/server/functions/images'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
@@ -16,14 +17,17 @@ function LandingPage() {
   const [style, setStyle] = useState<StyleTag | null>(null)
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['images', { page: 1, limit: 50, aspectRatio, style, search }], // Increased limit for masonry effect
-    queryFn: async () => {
-      const response = await fetch(
-        `/api/images?page=1&limit=50${aspectRatio ? `&aspectRatio=${aspectRatio}` : ''}${style ? `&style=${style}` : ''}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
-      )
-      if (!response.ok) throw new Error('Failed to fetch images')
-      return response.json()
-    },
+    queryKey: ['images', { page: 1, limit: 50, aspectRatio, style, search }],
+    queryFn: () =>
+      getImages({
+        data: {
+          page: 1,
+          limit: 50,
+          aspectRatio: aspectRatio ?? undefined,
+          style: style ?? undefined,
+          search: search || undefined,
+        },
+      }),
   })
 
   const handleSearchSubmit = useCallback((value: string) => {
@@ -44,19 +48,8 @@ function LandingPage() {
                 placeholder="Search prompts, styles..."
               />
             </div>
-
-            {/* We can make filter panel a dropdown or a horizontal scroll on mobile, 
-                 or keep it simple for now. Given the requirement for 'refactor styling',
-                 I'll make it cleaner. But for now let's keep it visible but maybe collapsible?
-                 The original gallery had it on the side. 
-                 Midjourney has filters in a top bar or side modal.
-                 Let's put filters in a collapsible area or just below for now, simpler.
-              */}
           </div>
 
-          {/* Filters - simplified for horizontal layout if possible, or kept as side. 
-              Refactoring to top bar filters to match modern "Explore" layouts.
-          */}
           <div className="w-full overflow-x-auto pb-2">
             <FilterPanel
               selectedAspectRatio={aspectRatio}

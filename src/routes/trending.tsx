@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { TrendingUp } from 'lucide-react'
 import type { GalleryImage } from '@/lib/schema'
 import { ImageCard } from '@/components/ImageCard'
+import { getTrendingImages } from '@/server/functions/trending'
 
 export const Route = createFileRoute('/trending')({
   component: TrendingPage,
@@ -11,11 +12,7 @@ export const Route = createFileRoute('/trending')({
 function TrendingPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['trending', { limit: 20 }],
-    queryFn: async () => {
-      const response = await fetch('/api/trending?limit=20')
-      if (!response.ok) throw new Error('Failed to fetch trending images')
-      return response.json()
-    },
+    queryFn: () => getTrendingImages({ data: { limit: 20 } }),
   })
 
   return (

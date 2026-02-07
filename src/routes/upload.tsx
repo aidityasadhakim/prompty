@@ -5,6 +5,7 @@ import { Image } from '@unpic/react'
 import type { CharacterLock, ImageMeta, Scene, Subject } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { ASPECT_RATIOS, STYLE_TAGS } from '@/lib/schema'
+import { confirmUpload, uploadImage } from '@/server/functions/upload'
 
 export const Route = createFileRoute('/upload')({
   component: UploadPage,
@@ -16,6 +17,7 @@ function UploadPage() {
   const [preview, setPreview] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [uploadComplete, setUploadComplete] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const [meta, setMeta] = useState<ImageMeta>({
     quality: 'ultra',
@@ -69,7 +71,7 @@ function UploadPage() {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
-    const droppedFile = e.dataTransfer.files[0]
+    const droppedFile = e.dataTransfer.files[0] as File | undefined
     if (droppedFile && droppedFile.type.startsWith('image/')) {
       setFile(droppedFile)
       const reader = new FileReader()
@@ -84,25 +86,48 @@ function UploadPage() {
     if (!file) return
 
     setUploading(true)
+    setUploadError(null)
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append(
-        'metadata',
-        JSON.stringify({ meta, character_lock: characterLock, scene, subject }),
-      )
+      const metadata = {
+        meta,
+        character_lock: characterLock,
+        scene,
+        subject,
+      }
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      // Step 1: Get pre-signed upload URL
+      const { uploadUrl, publicUrl } = await uploadImage({
+        data: {
+          filename: file.name,
+          metadata,
+        },
       })
 
-      if (!response.ok) throw new Error('Upload failed')
+      // Step 2: Upload file directly to R2
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      })
+
+      if (!uploadResponse.ok) throw new Error('Failed to upload file to R2')
+
+      // Step 3: Confirm upload and create DB records
+      await confirmUpload({
+        data: {
+          filename: file.name,
+          r2_url: publicUrl,
+          metadata,
+        },
+      })
 
       setUploadComplete(true)
     } catch (error) {
       console.error('Upload failed:', error)
+      setUploadError(error instanceof Error ? error.message : 'Upload failed')
     } finally {
       setUploading(false)
     }
@@ -122,7 +147,7 @@ function UploadPage() {
             Your image has been uploaded successfully.
           </p>
           <button
-            onClick={() => (window.location.href = '/gallery')}
+            onClick={() => (window.location.href = '/')}
             className="px-6 py-3 bg-accent-primary text-white rounded-lg hover:bg-accent-hover transition-colors"
           >
             View Gallery
@@ -217,7 +242,7 @@ function UploadPage() {
                     className="absolute top-4 right-4 p-2 bg-secondary rounded-full text-text-secondary hover:text-text-primary"
                     aria-label="Remove image"
                   >
-                    ×
+                    x
                   </button>
                 </div>
               ) : (
@@ -361,6 +386,12 @@ function UploadPage() {
                   2,
                 )}
               </div>
+
+              {uploadError && (
+                <p className="text-red-400 text-sm text-center">
+                  {uploadError}
+                </p>
+              )}
             </div>
 
             <div className="mt-8 flex justify-between">

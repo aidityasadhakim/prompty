@@ -1,7 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ArrowRight, Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { adminLogin } from '@/server/functions/admin'
 
 export const Route = createFileRoute('/admin')({
   component: AdminLoginPage,
@@ -11,6 +12,7 @@ function AdminLoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,18 +20,12 @@ function AdminLoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
+      const result = await adminLogin({ data: { password } })
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Login failed')
+      if (result.success && result.sessionId) {
+        localStorage.setItem('sessionId', result.sessionId)
+        navigate({ to: '/upload' })
       }
-
-      window.location.href = '/upload'
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
