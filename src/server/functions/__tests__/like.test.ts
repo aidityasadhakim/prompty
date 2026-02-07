@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('toggleLike Logic', () => {
   it('should throw error for invalid image ID (zero)', () => {

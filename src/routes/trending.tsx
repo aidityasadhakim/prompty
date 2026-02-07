@@ -1,9 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { ImageCard } from '@/components/ImageCard'
-import { cn } from '@/lib/utils'
 import { TrendingUp } from 'lucide-react'
 import type { GalleryImage } from '@/lib/schema'
+import { ImageCard } from '@/components/ImageCard'
 
 export const Route = createFileRoute('/trending')({
   component: TrendingPage,
@@ -20,7 +19,7 @@ function TrendingPage() {
   })
 
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen bg-background-primary pt-20">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
           <TrendingUp className="w-8 h-8 text-accent-primary" />
@@ -50,12 +49,7 @@ function TrendingPage() {
         )}
 
         {data && data.data.length > 0 && (
-          <div
-            className={cn(
-              'grid gap-4',
-              'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
-            )}
-          >
+          <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 space-y-4">
             {data.data.map((image: GalleryImage) => (
               <ImageCard key={image.id} image={image} />
             ))}

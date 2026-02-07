@@ -1,6 +1,6 @@
+import type { ImageMetadata } from '@/lib/schema'
 import { getDb } from '@/lib/db'
 import { generateR2UploadUrl } from '@/lib/r2'
-import { ImageMetadata } from '@/lib/schema'
 
 interface UploadImageInput {
   filename: string

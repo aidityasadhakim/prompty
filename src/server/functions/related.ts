@@ -1,6 +1,6 @@
+import type { GalleryImage } from '@/lib/schema'
 import { getDb } from '@/lib/db'
 import { getThumbnailUrl } from '@/lib/r2'
-import { GalleryImage } from '@/lib/schema'
 
 interface GetRelatedImagesInput {
   imageId: number
@@ -9,7 +9,7 @@ interface GetRelatedImagesInput {
 
 export async function getRelatedImages(
   input: GetRelatedImagesInput,
-): Promise<{ data: GalleryImage[] }> {
+): Promise<{ data: Array<GalleryImage> }> {
   const { imageId, limit = 6 } = input
 
   const db = getDb()
@@ -22,11 +22,11 @@ export async function getRelatedImages(
     return { data: [] }
   }
 
-  const styleTags = JSON.parse(originalImage.style_tags) as string[]
+  const styleTags = JSON.parse(originalImage.style_tags) as Array<string>
   const primaryStyle = styleTags[0] || ''
 
   let query = ''
-  let params: (string | number)[] = []
+  let params: Array<string | number> = []
 
   if (primaryStyle) {
     query = `
@@ -98,11 +98,11 @@ export async function getRelatedImages(
     likeCounts.map((l) => [l.image_id, l.like_count]),
   )
 
-  const images: GalleryImage[] = rows.slice(0, limit).map((row) => ({
+  const images: Array<GalleryImage> = rows.slice(0, limit).map((row) => ({
     id: row.id,
     r2_url: getThumbnailUrl(row.r2_url),
     aspect_ratio: row.aspect_ratio,
-    style_tags: JSON.parse(row.style_tags) as string[],
+    style_tags: JSON.parse(row.style_tags) as Array<string>,
     quality: row.quality,
     like_count: likeCountMap.get(row.id) || 0,
     created_at: row.created_at,

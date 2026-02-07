@@ -1,6 +1,6 @@
+import type { GalleryImage, PaginatedImages } from '@/lib/schema'
 import { getDb } from '@/lib/db'
 import { getThumbnailUrl } from '@/lib/r2'
-import { GalleryImage, PaginatedImages } from '@/lib/schema'
 
 interface GetImagesInput {
   page?: number
@@ -20,8 +20,8 @@ export async function getImages(
   const db = getDb()
   const offset = (page - 1) * limit
 
-  let whereClauses: string[] = []
-  let params: (string | number)[] = []
+  const whereClauses: Array<string> = []
+  const params: Array<string | number> = []
 
   if (aspectRatio) {
     whereClauses.push('aspect_ratio = ?')
@@ -85,11 +85,11 @@ export async function getImages(
     likeCounts.map((l) => [l.image_id, l.like_count]),
   )
 
-  const images: GalleryImage[] = rows.map((row) => ({
+  const images: Array<GalleryImage> = rows.map((row) => ({
     id: row.id,
     r2_url: getThumbnailUrl(row.r2_url),
     aspect_ratio: row.aspect_ratio,
-    style_tags: JSON.parse(row.style_tags) as string[],
+    style_tags: JSON.parse(row.style_tags) as Array<string>,
     quality: row.quality,
     like_count: likeCountMap.get(row.id) || 0,
     created_at: row.created_at,

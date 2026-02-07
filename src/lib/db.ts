@@ -1,5 +1,5 @@
+import { resolve } from 'node:path'
 import Database from 'better-sqlite3'
-import { resolve } from 'path'
 
 const dbPath = process.env.DATABASE_PATH || './src/data/prompty.db'
 

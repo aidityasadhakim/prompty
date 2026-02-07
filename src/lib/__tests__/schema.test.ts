@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { GalleryImage } from '@/lib/schema'
+import { describe, expect, it } from 'vitest'
+import type { GalleryImage } from '@/lib/schema'
 
 describe('Schema Types', () => {
   it('should define GalleryImage type correctly', () => {

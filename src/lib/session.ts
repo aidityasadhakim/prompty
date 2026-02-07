@@ -1,5 +1,5 @@
+import crypto from 'node:crypto'
 import { getDb } from './db'
-import crypto from 'crypto'
 
 export interface SessionData {
   id: string

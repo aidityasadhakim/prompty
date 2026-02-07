@@ -1,8 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from '@tanstack/react-router'
 import { Download, Heart, Share2 } from 'lucide-react'
+import { Image } from '@unpic/react'
 import { cn } from '@/lib/utils'
+
+import { NotFound } from '@/components/NotFound'
 
 export const Route = createFileRoute('/image/$imageId')({
   component: ImageDetailsPage,
@@ -15,8 +17,13 @@ function ImageDetailsPage() {
     queryKey: ['image', imageId],
     queryFn: async () => {
       const response = await fetch(`/api/images/${imageId}`)
+      if (response.status === 404) throw new Error('NOT_FOUND')
       if (!response.ok) throw new Error('Failed to fetch image')
       return response.json()
+    },
+    retry: (failureCount, error) => {
+      if (error.message === 'NOT_FOUND') return false
+      return failureCount < 3
     },
   })
 
@@ -49,10 +56,17 @@ function ImageDetailsPage() {
     )
   }
 
+  if (error?.message === 'NOT_FOUND') {
+    return <NotFound>The image you are looking for does not exist.</NotFound>
+  }
+
   if (error || !data) {
     return (
       <div className="min-h-screen bg-background-primary flex items-center justify-center">
-        <p className="text-red-400">Error loading image</p>
+        <div className="text-center space-y-4">
+          <p className="text-red-400 text-xl">Error loading image</p>
+          <p className="text-text-secondary">Please try again later.</p>
+        </div>
       </div>
     )
   }
@@ -62,10 +76,15 @@ function ImageDetailsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="relative">
-            <img
+            <Image
               src={data.image.r2_url}
               alt={`AI generated image #${data.image.id}`}
+              layout="constrained"
+              width={1200}
+              height={1600}
               className="w-full rounded-xl"
+              loading="eager"
+              decoding="async"
             />
             <div className="absolute top-4 right-4 flex gap-2">
               <button

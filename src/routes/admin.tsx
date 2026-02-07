@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Lock, ArrowRight } from 'lucide-react'
+import { ArrowRight, Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/admin')({

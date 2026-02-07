@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('getImages Logic', () => {
   it('should sanitize page parameter (default to 1)', () => {
@@ -122,8 +122,8 @@ describe('getImages Logic', () => {
       style?: string,
       search?: string,
     ) => {
-      const clauses: string[] = []
-      const params: string[] = []
+      const clauses: Array<string> = []
+      const params: Array<string> = []
 
       if (aspectRatio) {
         clauses.push('aspect_ratio = ?')

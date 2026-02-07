@@ -1,6 +1,6 @@
+import crypto from 'node:crypto'
 import { getDb } from '@/lib/db'
 import { getEnv } from '@/lib/env'
-import crypto from 'crypto'
 
 interface AdminLoginInput {
   password: string

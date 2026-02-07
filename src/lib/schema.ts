@@ -4,7 +4,7 @@ export interface ImageMeta {
   camera: string
   lens: string
   aspect_ratio: string
-  style: string[]
+  style: Array<string>
 }
 
 export interface CharacterLock {
@@ -19,7 +19,7 @@ export interface CharacterLock {
   lips: string
   skin: string
   body_type: string
-  distinguishing_features: string[]
+  distinguishing_features: Array<string>
 }
 
 export interface Scene {
@@ -27,7 +27,7 @@ export interface Scene {
   setting_details: string
   time_of_day: string
   lighting_description: string
-  atmospheric_qualities: string[]
+  atmospheric_qualities: Array<string>
 }
 
 export interface Subject {
@@ -47,7 +47,7 @@ export interface ImageRecord {
   id: number
   r2_url: string
   aspect_ratio: string
-  style_tags: string[]
+  style_tags: Array<string>
   quality: string | null
   created_at: string
   updated_at: string
@@ -66,7 +66,7 @@ export interface GalleryImage {
   id: number
   r2_url: string
   aspect_ratio: string
-  style_tags: string[]
+  style_tags: Array<string>
   quality: string | null
   like_count: number
   created_at: string
@@ -80,7 +80,7 @@ export interface ImageWithFullMetadata {
 }
 
 export interface PaginatedImages {
-  data: GalleryImage[]
+  data: Array<GalleryImage>
   pagination: {
     page: number
     limit: number
@@ -91,7 +91,7 @@ export interface PaginatedImages {
 
 export type AspectRatio = '1:1' | '3:2' | '2:3' | '9:16' | '16:9' | 'custom'
 
-export const ASPECT_RATIOS: AspectRatio[] = [
+export const ASPECT_RATIOS: Array<AspectRatio> = [
   '1:1',
   '3:2',
   '2:3',

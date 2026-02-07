@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { ImageCard } from '@/components/ImageCard'
 import { ChevronRight } from 'lucide-react'
-import { GalleryImage } from '@/lib/schema'
+import type { GalleryImage } from '@/lib/schema'
+import { ImageCard } from '@/components/ImageCard'
 import { cn } from '@/lib/utils'
 
 interface RelatedImagesProps {
-  images: GalleryImage[]
+  images: Array<GalleryImage>
   currentImageId: number
   title?: string
 }

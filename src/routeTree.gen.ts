@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TrendingRouteImport } from './routes/trending'
-import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ImageImageIdRouteImport } from './routes/image.$imageId'
@@ -24,11 +23,6 @@ const UploadRoute = UploadRouteImport.update({
 const TrendingRoute = TrendingRouteImport.update({
   id: '/trending',
   path: '/trending',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GalleryRoute = GalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -50,7 +44,6 @@ const ImageImageIdRoute = ImageImageIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/gallery': typeof GalleryRoute
   '/trending': typeof TrendingRoute
   '/upload': typeof UploadRoute
   '/image/$imageId': typeof ImageImageIdRoute
@@ -58,7 +51,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/gallery': typeof GalleryRoute
   '/trending': typeof TrendingRoute
   '/upload': typeof UploadRoute
   '/image/$imageId': typeof ImageImageIdRoute
@@ -67,36 +59,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/gallery': typeof GalleryRoute
   '/trending': typeof TrendingRoute
   '/upload': typeof UploadRoute
   '/image/$imageId': typeof ImageImageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/admin'
-    | '/gallery'
-    | '/trending'
-    | '/upload'
-    | '/image/$imageId'
+  fullPaths: '/' | '/admin' | '/trending' | '/upload' | '/image/$imageId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/gallery' | '/trending' | '/upload' | '/image/$imageId'
-  id:
-    | '__root__'
-    | '/'
-    | '/admin'
-    | '/gallery'
-    | '/trending'
-    | '/upload'
-    | '/image/$imageId'
+  to: '/' | '/admin' | '/trending' | '/upload' | '/image/$imageId'
+  id: '__root__' | '/' | '/admin' | '/trending' | '/upload' | '/image/$imageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
-  GalleryRoute: typeof GalleryRoute
   TrendingRoute: typeof TrendingRoute
   UploadRoute: typeof UploadRoute
   ImageImageIdRoute: typeof ImageImageIdRoute
@@ -116,13 +93,6 @@ declare module '@tanstack/react-router' {
       path: '/trending'
       fullPath: '/trending'
       preLoaderRoute: typeof TrendingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gallery': {
-      id: '/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -152,7 +122,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
-  GalleryRoute: GalleryRoute,
   TrendingRoute: TrendingRoute,
   UploadRoute: UploadRoute,
   ImageImageIdRoute: ImageImageIdRoute,

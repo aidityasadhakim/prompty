@@ -1,6 +1,6 @@
+import type { GalleryImage } from '@/lib/schema'
 import { getDb } from '@/lib/db'
 import { getThumbnailUrl } from '@/lib/r2'
-import { GalleryImage } from '@/lib/schema'
 
 interface GetTrendingImagesInput {
   limit?: number
@@ -8,7 +8,7 @@ interface GetTrendingImagesInput {
 
 export async function getTrendingImages(
   input: GetTrendingImagesInput,
-): Promise<{ data: GalleryImage[] }> {
+): Promise<{ data: Array<GalleryImage> }> {
   const limit = Math.min(50, Math.max(1, Number(input.limit) || 10))
 
   const db = getDb()
@@ -50,11 +50,11 @@ export async function getTrendingImages(
     like_count: number
   }>
 
-  const images: GalleryImage[] = rows.map((row) => ({
+  const images: Array<GalleryImage> = rows.map((row) => ({
     id: row.id,
     r2_url: getThumbnailUrl(row.r2_url),
     aspect_ratio: row.aspect_ratio,
-    style_tags: JSON.parse(row.style_tags) as string[],
+    style_tags: JSON.parse(row.style_tags) as Array<string>,
     quality: row.quality,
     like_count: row.like_count,
     created_at: row.created_at,

@@ -1,180 +1,111 @@
+import { useCallback, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Zap, Image, Download, Sparkles } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
+import type { AspectRatio, GalleryImage, StyleTag } from '@/lib/schema'
+import { ImageCard } from '@/components/ImageCard'
+import { SearchBar } from '@/components/SearchBar'
+import { FilterPanel } from '@/components/FilterPanel'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 })
 
-export default function LandingPage() {
-  const features = [
-    {
-      icon: <Image className="w-8 h-8 text-accent-primary" aria-hidden="true" />,
-      title: 'Curated Gallery',
-      description:
-        'Discover high-quality AI-generated images with detailed metadata',
-    },
-    {
-      icon: <Download className="w-8 h-8 text-accent-secondary" aria-hidden="true" />,
-      title: 'JSON Export',
-      description:
-        'Export structured metadata for your own AI generation workflows',
-    },
-    {
-      icon: <Sparkles className="w-8 h-8 text-accent-tertiary" aria-hidden="true" />,
-      title: 'Trending Content',
-      description:
-        'Explore the most popular images and styles in the community',
-    },
-    {
-      icon: <Zap className="w-8 h-8 text-accent-primary" aria-hidden="true" />,
-      title: 'Fast Search',
-      description:
-        'Find exactly what you need with powerful filtering and search',
-    },
-  ]
+function LandingPage() {
+  const [search, setSearch] = useState('')
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio | null>(null)
+  const [style, setStyle] = useState<StyleTag | null>(null)
 
-  const galleryPreviews = [
-    { alt: 'Dark gradient preview showing deep blue tones', color: '#05060b' },
-    { alt: 'Dark slate gradient preview with rich texture', color: '#12141c' },
-    { alt: 'Teal and green gradient preview in dark tones', color: '#2A4245' },
-    { alt: 'Purple accent gradient preview with subtle violet hues', color: '#6074DD' },
-  ]
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['images', { page: 1, limit: 50, aspectRatio, style, search }], // Increased limit for masonry effect
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/images?page=1&limit=50${aspectRatio ? `&aspectRatio=${aspectRatio}` : ''}${style ? `&style=${style}` : ''}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
+      )
+      if (!response.ok) throw new Error('Failed to fetch images')
+      return response.json()
+    },
+  })
+
+  const handleSearchSubmit = useCallback((value: string) => {
+    setSearch(value)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-background-primary">
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/5 via-transparent to-accent-secondary/5" />
-
-        <div className="relative container mx-auto px-4 py-20 text-center">
-          <div className="animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-bold text-text-primary mb-6 tracking-tight">
-              AI Image
-              <span className="block bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent">
-                Prompt Gallery
-              </span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto mb-10">
-              Discover, explore, and export AI-generated images with complete
-              structured metadata. Your creative companion for AI art
-              generation.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/gallery"
-                className={cn(
-                  'inline-flex items-center gap-2',
-                  'px-8 py-4 bg-accent-primary text-white font-semibold rounded-xl',
-                  'hover:bg-accent-hover transition-all duration-300',
-                  'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
-                )}
-              >
-                <Image className="w-5 h-5" aria-hidden="true" />
-                Explore Gallery
-              </a>
-              <a
-                href="#features"
-                className={cn(
-                  'inline-flex items-center gap-2',
-                  'px-8 py-4 bg-secondary text-text-primary font-semibold rounded-xl',
-                  'hover:bg-secondary/80 transition-all duration-300',
-                  'border border-border-default',
-                )}
-              >
-                Learn More
-              </a>
+    <div className="min-h-screen bg-background-primary pt-20">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col gap-8">
+          {/* Top Controls */}
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-20 z-30 bg-background-primary/95 backdrop-blur py-4 -mx-4 px-4 border-b border-border-default">
+            <div className="w-full md:w-auto flex-1 max-w-2xl">
+              <SearchBar
+                value={search}
+                onChange={() => {}}
+                onSubmit={handleSearchSubmit}
+                placeholder="Search prompts, styles..."
+              />
             </div>
+
+            {/* We can make filter panel a dropdown or a horizontal scroll on mobile, 
+                 or keep it simple for now. Given the requirement for 'refactor styling',
+                 I'll make it cleaner. But for now let's keep it visible but maybe collapsible?
+                 The original gallery had it on the side. 
+                 Midjourney has filters in a top bar or side modal.
+                 Let's put filters in a collapsible area or just below for now, simpler.
+              */}
           </div>
 
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-fade-in-up animation-delay-300">
-            {galleryPreviews.map((preview, index) => (
-              <div
-                key={index}
-                className={cn(
-                  'aspect-square rounded-2xl overflow-hidden',
-                  index === 0
-                    ? 'bg-gradient-to-br from-accent-primary/20 to-accent-secondary/20'
-                    : index === 1
-                    ? 'bg-gradient-to-bl from-accent-secondary/20 to-accent-tertiary/20'
-                    : index === 2
-                    ? 'bg-gradient-to-tr from-accent-tertiary/20 to-accent-primary/20'
-                    : 'bg-gradient-to-tl from-accent-primary/10 to-accent-secondary/10',
-                )}
-              >
-                <img
-                  src={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='${encodeURIComponent(preview.color)}' width='100' height='100'/%3E%3C/svg%3E`}
-                  alt={preview.alt}
-                  className="w-full h-full object-cover"
-                />
+          {/* Filters - simplified for horizontal layout if possible, or kept as side. 
+              Refactoring to top bar filters to match modern "Explore" layouts.
+          */}
+          <div className="w-full overflow-x-auto pb-2">
+            <FilterPanel
+              selectedAspectRatio={aspectRatio}
+              selectedStyle={style}
+              onAspectRatioChange={setAspectRatio}
+              onStyleChange={setStyle}
+              className="flex flex-row gap-8 space-y-0"
+            />
+          </div>
+
+          <main className="min-h-[500px]">
+            {isLoading && (
+              <div className="flex items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent-primary" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="features" className="py-24 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-text-primary text-center mb-4">
-            Why Prompty?
-          </h2>
-          <p className="text-text-secondary text-center max-w-2xl mx-auto mb-16">
-            Built for AI art creators who want quality metadata and seamless
-            workflows.
-          </p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className={cn(
-                  'group p-6 rounded-2xl',
-                  'bg-secondary/30 border border-border-default',
-                  'hover:border-accent-primary/50 transition-all duration-300',
-                  'hover:shadow-lg hover:shadow-accent-primary/10',
-                )}
-              >
-                <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-text-primary mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-text-secondary">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-text-primary mb-6">
-            Ready to explore?
-          </h2>
-          <p className="text-text-secondary text-xl max-w-2xl mx-auto mb-10">
-            Start discovering AI-generated images with complete, structured
-            metadata today.
-          </p>
-          <a
-            href="/gallery"
-            className={cn(
-              'inline-flex items-center gap-2',
-              'px-8 py-4 bg-accent-primary text-white font-semibold rounded-xl',
-              'hover:bg-accent-hover transition-all duration-300',
-              'shadow-lg shadow-accent-primary/25 hover:shadow-accent-primary/40',
             )}
-          >
-            <Image className="w-5 h-5" aria-hidden="true" />
-            Browse Gallery
-          </a>
-        </div>
-      </section>
 
-      <footer className="py-8 border-t border-border-default">
-        <div className="container mx-auto px-4 text-center text-text-muted">
-          <p>© 2026 Prompty. AI Image Prompt Gallery.</p>
+            {error && (
+              <div className="text-center py-20">
+                <p className="text-red-400">Error loading images</p>
+              </div>
+            )}
+
+            {data && data.data.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-text-secondary">No images found</p>
+              </div>
+            )}
+
+            {data && data.data.length > 0 && (
+              <>
+                <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 space-y-4">
+                  {data.data.map((image: GalleryImage) => (
+                    <ImageCard key={image.id} image={image} />
+                  ))}
+                </div>
+
+                {data.pagination.hasMore && (
+                  <div className="mt-8 text-center py-8">
+                    <button className="px-6 py-3 bg-secondary text-text-primary rounded-lg hover:bg-secondary/80 transition-colors">
+                      Load More
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </main>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

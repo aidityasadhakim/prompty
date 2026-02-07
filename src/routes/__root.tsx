@@ -2,11 +2,14 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
+  Outlet,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import Header from '../components/Header'
+import { NotFound } from '../components/NotFound'
+import { DefaultCatchBoundary } from '../components/DefaultCatchBoundary'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -40,10 +43,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
 
-  shellComponent: RootDocument,
+  component: RootDocument,
+  notFoundComponent: NotFound,
+  errorComponent: DefaultCatchBoundary,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument() {
   return (
     <html lang="en">
       <head>
@@ -51,7 +56,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <Header />
-        {children}
+        <Outlet />
         <TanStackDevtools
           config={{
             position: 'bottom-right',

@@ -1,15 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Upload, FileJson, Check, ArrowRight, ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, FileJson, Upload } from 'lucide-react'
+import { Image } from '@unpic/react'
+import type { CharacterLock, ImageMeta, Scene, Subject } from '@/lib/schema'
 import { cn } from '@/lib/utils'
-import {
-  ImageMeta,
-  CharacterLock,
-  Scene,
-  Subject,
-  ASPECT_RATIOS,
-  STYLE_TAGS,
-} from '@/lib/schema'
+import { ASPECT_RATIOS, STYLE_TAGS } from '@/lib/schema'
 
 export const Route = createFileRoute('/upload')({
   component: UploadPage,
@@ -205,10 +200,14 @@ function UploadPage() {
             >
               {preview ? (
                 <div className="relative">
-                  <img
+                  <Image
                     src={preview}
                     alt="Preview of uploaded image"
-                    className="max-h-96 mx-auto rounded-lg"
+                    layout="constrained"
+                    width={600}
+                    height={400}
+                    className="max-h-96 mx-auto rounded-lg object-contain"
+                    loading="eager"
                   />
                   <button
                     onClick={() => {

@@ -1,6 +1,6 @@
+import type { AspectRatio, StyleTag } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { ASPECT_RATIOS, STYLE_TAGS } from '@/lib/schema'
-import type { AspectRatio, StyleTag } from '@/lib/schema'
 
 interface FilterPanelProps {
   selectedAspectRatio: AspectRatio | null

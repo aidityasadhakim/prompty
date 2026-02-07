@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Heart } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Image } from '@unpic/react'
 import type { GalleryImage } from '@/lib/schema'
+import { cn } from '@/lib/utils'
 
 interface ImageCardProps {
   image: GalleryImage
@@ -26,13 +27,18 @@ export function ImageCard({ image, onLike, isLiked = false }: ImageCardProps) {
     <Link
       to="/image/$imageId"
       params={{ imageId: image.id.toString() }}
-      className="group relative block aspect-[9/16] rounded-xl overflow-hidden bg-secondary/50"
+      className="group relative block rounded-xl overflow-hidden bg-secondary/50 break-inside-avoid mb-4"
     >
-      <img
+      <Image
         src={image.r2_url}
         alt={`AI generated image #${image.id}`}
-        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        layout="fullWidth"
+        className={cn(
+          'w-full h-auto object-cover transition-transform duration-300',
+          'group-hover:scale-105',
+        )}
         loading="lazy"
+        decoding="async"
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-background-primary/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -64,7 +70,7 @@ export function ImageCard({ image, onLike, isLiked = false }: ImageCardProps) {
           ))}
           {image.style_tags.length > 3 && (
             <span className="px-2 py-0.5 text-xs rounded-full bg-secondary/80 text-text-secondary">
-              +{image.style_tags.length - 3}
+              {`+${image.style_tags.length - 3}`}
             </span>
           )}
         </div>

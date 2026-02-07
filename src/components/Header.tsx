@@ -1,6 +1,6 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Menu, X, Home, Image, TrendingUp, Upload, Lock } from 'lucide-react'
+import { Home, Lock, Menu, TrendingUp, Upload, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function Header() {
@@ -8,8 +8,8 @@ export default function Header() {
   const location = useLocation()
 
   const navItems = [
-    { to: '/', label: 'Home', icon: Home },
-    { to: '/gallery', label: 'Gallery', icon: Image },
+    { to: '/', label: 'Explore', icon: Home },
+    // Gallery link removed
     { to: '/trending', label: 'Trending', icon: TrendingUp },
     { to: '/upload', label: 'Upload', icon: Upload },
     { to: '/admin', label: 'Admin', icon: Lock },
@@ -26,21 +26,23 @@ export default function Header() {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-40 h-16',
-          'bg-background-primary/80 backdrop-blur-md',
-          'border-b border-border-default',
+          'fixed top-0 left-0 right-0 z-50 h-16',
+          'bg-background/80 backdrop-blur-md', // Using generic background variable which maps to primary
+          'border-b border-border',
+          'transition-all duration-300',
         )}
       >
         <div
           className={cn(
-            'h-full px-4 md:px-6',
+            'h-full container mx-auto px-4',
             'flex items-center justify-between',
           )}
         >
           <Link
-            to="/" viewTransition
+            to="/"
+            viewTransition
             className={cn(
-              'text-xl font-semibold text-text-primary',
+              'text-xl font-semibold text-foreground',
               'hover:text-accent-primary transition-colors',
             )}
           >
@@ -57,7 +59,7 @@ export default function Header() {
                   'text-sm font-medium transition-colors',
                   isActive(item.to)
                     ? 'bg-accent-primary/10 text-accent-primary'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-secondary/50',
+                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                 )}
               >
                 <item.icon className="w-4 h-4" />
@@ -70,7 +72,7 @@ export default function Header() {
             onClick={() => setIsOpen(true)}
             className={cn(
               'md:hidden p-2 rounded-lg',
-              'text-text-secondary hover:text-text-primary',
+              'text-muted-foreground hover:text-foreground',
               'hover:bg-secondary/50 transition-colors',
             )}
             aria-label="Open menu"
@@ -83,7 +85,7 @@ export default function Header() {
       <aside
         className={cn(
           'fixed top-0 right-0 h-full w-72 z-50',
-          'bg-background-secondary border-l border-border-default',
+          'bg-background border-l border-border',
           'transform transition-transform duration-300',
           isOpen ? 'translate-x-0' : 'translate-x-full',
         )}
@@ -91,15 +93,15 @@ export default function Header() {
         <div
           className={cn(
             'flex items-center justify-between p-4',
-            'border-b border-border-default',
+            'border-b border-border',
           )}
         >
-          <span className="text-lg font-semibold text-text-primary">Menu</span>
+          <span className="text-lg font-semibold text-foreground">Menu</span>
           <button
             onClick={() => setIsOpen(false)}
             className={cn(
               'p-2 rounded-lg',
-              'text-text-secondary hover:text-text-primary',
+              'text-muted-foreground hover:text-foreground',
               'hover:bg-secondary/50 transition-colors',
             )}
             aria-label="Close menu"
@@ -120,7 +122,7 @@ export default function Header() {
                   'text-sm font-medium transition-colors',
                   isActive(item.to)
                     ? 'bg-accent-primary/10 text-accent-primary'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-secondary/50',
+                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50',
                 )}
               >
                 <item.icon className="w-5 h-5" />

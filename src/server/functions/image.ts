@@ -1,6 +1,6 @@
+import type { ImageWithFullMetadata } from '@/lib/schema'
 import { getDb } from '@/lib/db'
 import { getFullImageUrl } from '@/lib/r2'
-import { ImageWithFullMetadata } from '@/lib/schema'
 
 interface GetImageByIdInput {
   id: number
@@ -67,7 +67,7 @@ export async function getImageById(
       id: image.id,
       r2_url: getFullImageUrl(image.r2_url),
       aspect_ratio: image.aspect_ratio,
-      style_tags: JSON.parse(image.style_tags) as string[],
+      style_tags: JSON.parse(image.style_tags) as Array<string>,
       quality: image.quality,
       created_at: image.created_at,
       updated_at: image.updated_at,

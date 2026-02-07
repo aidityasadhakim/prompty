@@ -1,11 +1,12 @@
 import {
   createContext,
-  useContext,
-  useState,
   useCallback,
-  ReactNode,
+  useContext,
+  useState
 } from 'react'
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-react'
+import { AlertCircle, CheckCircle, Info, X } from 'lucide-react'
+import type {
+  ReactNode} from 'react';
 import { cn } from '@/lib/utils'
 
 type ToastType = 'success' | 'error' | 'info'
@@ -17,7 +18,7 @@ interface Toast {
 }
 
 interface ToastContextValue {
-  toasts: Toast[]
+  toasts: Array<Toast>
   addToast: (message: string, type?: ToastType) => void
   removeToast: (id: string) => void
 }
@@ -37,7 +38,7 @@ interface ToastProviderProps {
 }
 
 export function ToastProvider({ children }: ToastProviderProps) {
-  const [toasts, setToasts] = useState<Toast[]>([])
+  const [toasts, setToasts] = useState<Array<Toast>>([])
 
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
     const id = Math.random().toString(36).substring(7)
@@ -61,7 +62,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 }
 
 interface ToastContainerProps {
-  toasts: Toast[]
+  toasts: Array<Toast>
   onRemove: (id: string) => void
 }
 
